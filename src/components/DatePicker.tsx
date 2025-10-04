@@ -10,9 +10,6 @@ export default function DatePicker({ onDateSelect, disabled }: DatePickerProps) 
   const [selectedDate, setSelectedDate] = useState('');
 
   const today = new Date().toISOString().split('T')[0];
-  const maxDate = new Date();
-  maxDate.setDate(maxDate.getDate() + 14);
-  const maxDateStr = maxDate.toISOString().split('T')[0];
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const date = e.target.value;
@@ -32,13 +29,10 @@ export default function DatePicker({ onDateSelect, disabled }: DatePickerProps) 
           type="date"
           value={selectedDate}
           onChange={handleDateChange}
-          min={today}
-          max={maxDateStr}
-          disabled={disabled}
           className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed text-gray-700"
         />
         <p className="text-sm text-gray-500">
-          Select a date within the next 14 days
+          Select any date
         </p>
       </div>
     </div>
