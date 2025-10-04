@@ -18,6 +18,31 @@ export default function ResultsCard({ result, cityName }: ResultsCardProps) {
     });
   };
 
+  // Check if result has the expected structure
+  if (!result || !result.location || !result.rainRisk || !result.heatRisk) {
+    return (
+      <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-2xl animate-fadeIn">
+        <div className="text-center mb-6">
+          <h2 className="text-3xl font-bold text-gray-800 mb-2">
+            Weather Data Available
+          </h2>
+          <p className="text-gray-600">
+            {cityName || 'Location coordinates'}
+          </p>
+          <p className="text-sm text-gray-500 mt-1">
+            Raw NASA POWER API data received
+          </p>
+        </div>
+        <div className="bg-gray-50 rounded-lg p-4">
+          <h3 className="text-lg font-semibold mb-2">NASA POWER API Response</h3>
+          <pre className="text-xs text-gray-600 overflow-auto max-h-64">
+            {JSON.stringify(result, null, 2)}
+          </pre>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-2xl animate-fadeIn">
       <div className="text-center mb-6">

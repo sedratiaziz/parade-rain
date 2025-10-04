@@ -1,12 +1,67 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Umbrella } from "lucide-react";
 import LocationInput from "./components/LocationInput";
 import DatePicker from "./components/DatePicker";
 import ResultsCard from "./components/ResultsCard";
 import LoadingSpinner from "./components/LoadingSpinner";
+import WeatherPrediction from "./components/WeatherPrediction";
 import { ForecastResult } from "./types";
 import Map from "./components/Map";
 import axios from "axios";
+
+// Transform NASA POWER API data to ForecastResult format
+const transformNASADataToForecastResult = (nasaData: any, location: { lat: number; lon: number }, date: string): ForecastResult => {
+  const parameters = nasaData.properties?.parameter || {};
+  const temperatureData = parameters.T2M || {};
+  const precipitationData = parameters.PRECTOT || {};
+  
+  // Calculate averages
+  const temperatures = Object.values(temperatureData).filter((val: any) => val !== null) as number[];
+  const precipitations = Object.values(precipitationData).filter((val: any) => val !== null) as number[];
+  
+  const avgTemp = temperatures.length > 0 ? temperatures.reduce((a, b) => a + b, 0) / temperatures.length : 20;
+  const minTemp = temperatures.length > 0 ? Math.min(...temperatures) : avgTemp - 5;
+  const maxTemp = temperatures.length > 0 ? Math.max(...temperatures) : avgTemp + 5;
+  const avgPrecipitation = precipitations.length > 0 ? precipitations.reduce((a, b) => a + b, 0) / precipitations.length : 0;
+  
+  // Convert temperature from Celsius to Fahrenheit
+  const tempMaxF = (maxTemp * 9/5) + 32;
+  const tempMinF = (minTemp * 9/5) + 32;
+  
+  // Determine rain risk
+  const rainProbability = Math.min(90, avgPrecipitation * 100);
+  const rainLevel = rainProbability < 30 ? 'low' : rainProbability < 70 ? 'medium' : 'high';
+  const rainColor = rainLevel === 'low' ? 'green' : rainLevel === 'medium' ? 'yellow' : 'red';
+  const rainEmoji = rainLevel === 'low' ? '☀️' : rainLevel === 'medium' ? '⛅' : '🌧️';
+  
+  // Determine heat risk
+  const heatLevel = tempMaxF < 80 ? 'low' : tempMaxF < 95 ? 'medium' : 'high';
+  const heatColor = heatLevel === 'low' ? 'blue' : heatLevel === 'medium' ? 'orange' : 'red';
+  const heatEmoji = heatLevel === 'low' ? '❄️' : heatLevel === 'medium' ? '🌡️' : '🔥';
+  
+  return {
+    location: {
+      latitude: location.lat,
+      longitude: location.lon
+    },
+    date: date,
+    rainRisk: {
+      probability: Math.round(rainProbability),
+      level: rainLevel as 'low' | 'medium' | 'high',
+      color: rainColor,
+      emoji: rainEmoji
+    },
+    heatRisk: {
+      temperatureMax: Math.round(tempMaxF),
+      temperatureMin: Math.round(tempMinF),
+      temperatureMaxC: Math.round(maxTemp),
+      temperatureMinC: Math.round(minTemp),
+      level: heatLevel as 'low' | 'medium' | 'high',
+      color: heatColor,
+      emoji: heatEmoji
+    }
+  };
+};
 
 function App() {
   const [location, setLocation] = useState<{
@@ -19,9 +74,7 @@ function App() {
   const [date, setDate] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<ForecastResult | null>(null);
-  const [error, setError] = useState<string>("");
-  let [startDate, setStartDate] = useState('') 
-  let [endDate, setEndDate] = useState('') 
+  const [error, setError] = useState<string>(""); 
 
   const handleLocationSelect = (
     lat: number,
@@ -50,20 +103,33 @@ function App() {
 
   
   const handleGetForecast = async () => {
-    setStartDate('20220612')
-    setEndDate('20230612')
-    
     if (!location || !date) return;
+
+    // Format the user-selected date for NASA API (YYYYMMDD format)
+    const formatDateForNASA = (dateString: string): string => {
+      const date = new Date(dateString);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}${month}${day}`;
+    };
+
+    const formattedDate = formatDateForNASA(date);
 
     setIsLoading(true);
     setError("");
     setResult(null);
-      console.log(`https://power.larc.nasa.gov/api/temporal/hourly/point?start=${startDate}&end=${endDate}&latitude=${location.lat}&longitude=${location.lon}&community=ag&parameters=T2M&header=true`)
+    
+    console.log(`https://power.larc.nasa.gov/api/temporal/hourly/point?start=${formattedDate}&end=${formattedDate}&latitude=${location.lat}&longitude=${location.lon}&community=ag&parameters=T2M,RH2M,PRECTOT,WS2M&header=true`)
 
     try {
-      const forecast = await axios.get(`https://power.larc.nasa.gov/api/temporal/hourly/point?start=${startDate}&end=${endDate}&latitude=${location.lat}&longitude=${location.lon}&community=ag&parameters=T2M&header=true`);
+      // Use the same parameters as WeatherPrediction for consistency
+      const forecast = await axios.get(`https://power.larc.nasa.gov/api/temporal/hourly/point?start=${formattedDate}&end=${formattedDate}&latitude=${location.lat}&longitude=${location.lon}&community=ag&parameters=T2M,RH2M,PRECTOT,WS2M&header=true`);
       console.log(forecast)
-      setResult(forecast.data);
+      
+      // Transform NASA API response to ForecastResult format
+      const transformedResult = transformNASADataToForecastResult(forecast.data, location, date);
+      setResult(transformedResult);
     
     } catch (err) {
       setError(
@@ -126,6 +192,22 @@ function App() {
             lng={location?.lon}
             onMapSelect={handleMapSelect}
           />
+
+          {/* Weather Prediction Section - Shows when location and date are selected */}
+          {location && date && (
+            <div className="w-full max-w-4xl">
+              <div className="text-center mb-4">
+                <h2 className="text-2xl font-bold text-gray-800 mb-2">AI Weather Prediction</h2>
+                <p className="text-gray-600">Powered by NASA POWER API and AI analysis</p>
+              </div>
+              <WeatherPrediction 
+                latitude={location.lat} 
+                longitude={location.lon} 
+                date={date}
+                dateRangeDays={14} // Analyze 7 days before and after the selected date
+              />
+            </div>
+          )}
 
           {location && date && (
             <button
