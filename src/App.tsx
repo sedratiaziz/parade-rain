@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Umbrella } from "lucide-react";
 import LocationInput from "./components/LocationInput";
 import DatePicker from "./components/DatePicker";
@@ -73,16 +73,16 @@ function App() {
 
 
 
-  async function getData() {
-    const response = await axios.get(`https://power.larc.nasa.gov/api/temporal/hourly/point?start=20250720&end=20250730&latitude=73.0364&longitude=13.4109&community=ag&parameters=T2M&header=true
-`)
-    setTemperature(response.data)
-    console.log(response.data.properties.parameter.T2M)
-  }
+//   async function getData() {
+//     const response = await axios.get(`https://power.larc.nasa.gov/api/temporal/hourly/point?start=20250720&end=20250730&latitude=73.0364&longitude=13.4109&community=ag&parameters=T2M&header=true
+// `)
+//     setTemperature(response.data)
+//     console.log(response.data.properties.parameter.T2M)
+//   }
 
-  useEffect(()=>{
-    getData()
-  }, [])
+//   useEffect(()=>{
+//     getData()
+//   }, [])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">
