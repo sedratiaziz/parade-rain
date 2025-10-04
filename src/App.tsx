@@ -1,43 +1,67 @@
-import { useState } from 'react';
-import { Umbrella } from 'lucide-react';
-import LocationInput from './components/LocationInput';
-import DatePicker from './components/DatePicker';
-import ResultsCard from './components/ResultsCard';
-import LoadingSpinner from './components/LoadingSpinner';
-import { ForecastResult } from './types';
-import { getForecast } from './services/forecastService';
+import { useState } from "react";
+import { Umbrella } from "lucide-react";
+import LocationInput from "./components/LocationInput";
+import DatePicker from "./components/DatePicker";
+import ResultsCard from "./components/ResultsCard";
+import LoadingSpinner from "./components/LoadingSpinner";
+import { ForecastResult } from "./types";
+import { getForecast } from "./services/forecastService";
+import Map from "./components/Map";
 
 function App() {
-  const [location, setLocation] = useState<{ lat: number; lon: number; name?: string } | null>(null);
-  const [date, setDate] = useState<string>('');
+  const [location, setLocation] = useState<{
+    lat: number;
+    lon: number;
+    name?: string;
+  } | null>(null);
+  const [manualLat, setManualLat] = useState("");
+  const [manualLon, setManualLon] = useState("");
+  const [date, setDate] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<ForecastResult | null>(null);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<string>("");
 
-  const handleLocationSelect = (lat: number, lon: number, cityName?: string) => {
+  const handleLocationSelect = (
+    lat: number,
+    lon: number,
+    cityName?: string
+  ) => {
     setLocation({ lat, lon, name: cityName });
+    setManualLat(lat.toString());
+    setManualLon(lon.toString());
     setResult(null);
-    setError('');
+    setError("");
+  };
+
+  // Called when user clicks on map
+  const handleMapSelect = (lat: number, lon: number) => {
+    setLocation({ lat, lon });
+    setManualLat(lat.toString());
+    setManualLon(lon.toString());
   };
 
   const handleDateSelect = (selectedDate: string) => {
     setDate(selectedDate);
     setResult(null);
-    setError('');
+    setError("");
   };
 
   const handleGetForecast = async () => {
     if (!location || !date) return;
 
     setIsLoading(true);
-    setError('');
+    setError("");
     setResult(null);
 
     try {
       const forecast = await getForecast(location.lat, location.lon, date);
       setResult(forecast);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch forecast. Please try again.');
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to fetch forecast. Please try again."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -56,16 +80,28 @@ function App() {
             </h1>
           </div>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Check weather risks for your upcoming events. Get rain probability and heat risk forecasts
-            to plan your perfect day.
+            Check weather risks for your upcoming events. Get rain probability
+            and heat risk forecasts to plan your perfect day.
           </p>
         </header>
 
         <div className="flex flex-col items-center gap-6 mb-8">
           <div className="grid md:grid-cols-2 gap-6 w-full max-w-4xl">
-            <LocationInput onLocationSelect={handleLocationSelect} />
+            <LocationInput
+              onLocationSelect={handleLocationSelect}
+              manualLat={manualLat}
+              manualLon={manualLon}
+              setManualLat={setManualLat}
+              setManualLon={setManualLon}
+            />
             <DatePicker onDateSelect={handleDateSelect} disabled={!location} />
           </div>
+
+          <Map
+            lat={location?.lat}
+            lng={location?.lon}
+            onMapSelect={handleMapSelect}
+          />
 
           {location && date && (
             <button
