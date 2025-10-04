@@ -14,7 +14,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<ForecastResult | null>(null);
   const [error, setError] = useState<string>('');
-  let [test, setTest] = useState([])
+  let [temperature, setTemperature] = useState([])
 
   const handleLocationSelect = (lat: number, lon: number, cityName?: string) => {
     setLocation({ lat, lon, name: cityName });
@@ -47,10 +47,14 @@ function App() {
 
   const canGetForecast = location && date && !isLoading;
 
+
+
+
+
   async function getData() {
     const response = await axios.get(`https://power.larc.nasa.gov/api/temporal/hourly/point?start=20250720&end=20250730&latitude=73.0364&longitude=13.4109&community=ag&parameters=T2M&header=true
 `)
-    setTest(response.data)
+    setTemperature(response.data)
     console.log(response.data.properties.parameter.T2M)
   }
 
@@ -107,6 +111,11 @@ function App() {
             <ResultsCard result={result} cityName={location?.name} />
           ) : null}
         </div>
+
+        
+        
+
+
       </div>
 
       <footer className="text-center py-8 text-gray-600 text-sm">
@@ -117,6 +126,13 @@ function App() {
 }
 
 export default App;
+
+
+
+
+
+
+
 
 
 // import './App.css'
