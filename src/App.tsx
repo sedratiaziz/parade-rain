@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Umbrella } from 'lucide-react';
 import LocationInput from './components/LocationInput';
 import DatePicker from './components/DatePicker';
@@ -6,6 +6,7 @@ import ResultsCard from './components/ResultsCard';
 import LoadingSpinner from './components/LoadingSpinner';
 import { ForecastResult } from './types';
 import { getForecast } from './services/forecastService';
+import axios from 'axios';
 
 function App() {
   const [location, setLocation] = useState<{ lat: number; lon: number; name?: string } | null>(null);
@@ -13,6 +14,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<ForecastResult | null>(null);
   const [error, setError] = useState<string>('');
+  let [test, setTest] = useState([])
 
   const handleLocationSelect = (lat: number, lon: number, cityName?: string) => {
     setLocation({ lat, lon, name: cityName });
@@ -44,6 +46,17 @@ function App() {
   };
 
   const canGetForecast = location && date && !isLoading;
+
+  async function getData() {
+    const response = await axios.get(`https://power.larc.nasa.gov/api/temporal/hourly/point?start=20250720&end=20250730&latitude=73.0364&longitude=13.4109&community=ag&parameters=T2M&header=true
+`)
+    setTest(response.data)
+    console.log(response.data.properties.parameter.T2M)
+  }
+
+  useEffect(()=>{
+    getData()
+  }, [])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">
@@ -104,3 +117,32 @@ function App() {
 }
 
 export default App;
+
+
+// import './App.css'
+// import {Routes ,Route} from 'react-router'
+// import Login from './pages/Login'
+// import Homepage from './pages/Homepage'
+// import Signup from './pages/Signup'
+// import Navbar from './components/Navbar'
+// import ValidateIsLoggedIn from './validators/ValidateIsLoggedIn'
+// import ValidateIsLoggedOut from './validators/'
+
+// function App() {
+
+
+//   return (
+//     <>
+//       <Navbar/>
+//       <Routes>
+//         <Route path="/" element={<ValidateIsLoggedIn><Homepage/></ValidateIsLoggedIn>}/>
+//         <Route path="/signup" element={<ValidateIsLoggedOut><Signup/></ValidateIsLoggedOut>}/>
+//         <Route path="/login" element={<ValidateIsLoggedOut><Login/></ValidateIsLoggedOut>}/>
+//       </Routes>
+//     </>
+//   )
+// }
+
+// export default App
+
+
