@@ -5,8 +5,8 @@ import DatePicker from "./components/DatePicker";
 import ResultsCard from "./components/ResultsCard";
 import LoadingSpinner from "./components/LoadingSpinner";
 import { ForecastResult } from "./types";
-import { getForecast } from "./services/forecastService";
 import Map from "./components/Map";
+import axios from "axios";
 
 function App() {
   const [location, setLocation] = useState<{
@@ -20,6 +20,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<ForecastResult | null>(null);
   const [error, setError] = useState<string>("");
+  let [startDate, setStartDate] = useState('') 
+  let [endDate, setEndDate] = useState('') 
 
   const handleLocationSelect = (
     lat: number,
@@ -46,16 +48,23 @@ function App() {
     setError("");
   };
 
+  
   const handleGetForecast = async () => {
+    setStartDate('20220612')
+    setEndDate('20230612')
+    
     if (!location || !date) return;
 
     setIsLoading(true);
     setError("");
     setResult(null);
+      console.log(`https://power.larc.nasa.gov/api/temporal/hourly/point?start=${startDate}&end=${endDate}&latitude=${location.lat}&longitude=${location.lon}&community=ag&parameters=T2M&header=true`)
 
     try {
-      const forecast = await getForecast(location.lat, location.lon, date);
-      setResult(forecast);
+      const forecast = await axios.get(`https://power.larc.nasa.gov/api/temporal/hourly/point?start=${startDate}&end=${endDate}&latitude=${location.lat}&longitude=${location.lon}&community=ag&parameters=T2M&header=true`);
+      console.log(forecast)
+      setResult(forecast.data);
+    
     } catch (err) {
       setError(
         err instanceof Error
