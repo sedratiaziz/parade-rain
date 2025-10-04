@@ -69,6 +69,21 @@ function App() {
 
   const canGetForecast = location && date && !isLoading;
 
+
+
+
+
+  async function getData() {
+    const response = await axios.get(`https://power.larc.nasa.gov/api/temporal/hourly/point?start=20250720&end=20250730&latitude=73.0364&longitude=13.4109&community=ag&parameters=T2M&header=true
+`)
+    setTemperature(response.data)
+    console.log(response.data.properties.parameter.T2M)
+  }
+
+  useEffect(()=>{
+    getData()
+  }, [])
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">
       <div className="container mx-auto px-4 py-8">
@@ -130,6 +145,11 @@ function App() {
             <ResultsCard result={result} cityName={location?.name} />
           ) : null}
         </div>
+
+        
+        
+
+
       </div>
 
       <footer className="text-center py-8 text-gray-600 text-sm">
@@ -140,3 +160,39 @@ function App() {
 }
 
 export default App;
+
+
+
+
+
+
+
+
+
+// import './App.css'
+// import {Routes ,Route} from 'react-router'
+// import Login from './pages/Login'
+// import Homepage from './pages/Homepage'
+// import Signup from './pages/Signup'
+// import Navbar from './components/Navbar'
+// import ValidateIsLoggedIn from './validators/ValidateIsLoggedIn'
+// import ValidateIsLoggedOut from './validators/'
+
+// function App() {
+
+
+//   return (
+//     <>
+//       <Navbar/>
+//       <Routes>
+//         <Route path="/" element={<ValidateIsLoggedIn><Homepage/></ValidateIsLoggedIn>}/>
+//         <Route path="/signup" element={<ValidateIsLoggedOut><Signup/></ValidateIsLoggedOut>}/>
+//         <Route path="/login" element={<ValidateIsLoggedOut><Login/></ValidateIsLoggedOut>}/>
+//       </Routes>
+//     </>
+//   )
+// }
+
+// export default App
+
+
