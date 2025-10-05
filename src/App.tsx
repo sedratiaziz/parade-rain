@@ -12,6 +12,7 @@ import Map from "./components/Map";
 import axios from "axios";
 import "./App.css"; 
 import Footer from "./components/Footer";
+import WhyUs from "./components/WhyUs";
 
 // Transform NASA POWER API data to ForecastResult format
 const transformNASADataToForecastResult = (nasaData: any, location: { lat: number; lon: number }, date: string): ForecastResult => {
@@ -174,6 +175,8 @@ function App() {
       
       {/* Hero Section */}
       <HeroSection />
+
+      <WhyUs />
       
       {/* Main App Content */}
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">

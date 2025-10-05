@@ -54,7 +54,8 @@ const WeatherPrediction: React.FC<WeatherPredictionProps> = ({
   // Format date for NASA API (YYYYMMDD format)
   const formatDateForNASA = (dateString: string): string => {
     const date = new Date(dateString);
-    const year = date.getFullYear();
+    // Subtract 3 from the year
+    const year = date.getFullYear() - 3;
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}${month}${day}`;
@@ -204,12 +205,13 @@ const WeatherPrediction: React.FC<WeatherPredictionProps> = ({
       startDate.setDate(selectedDate.getDate() - dateRangeDays);
       const endDate = new Date(selectedDate);
       endDate.setDate(selectedDate.getDate() + dateRangeDays);
-      
+
+      // Format start and end dates with year - 3 and yyyymmdd format
       const startDateFormatted = formatDateForNASA(startDate.toISOString().split('T')[0]);
       const endDateFormatted = formatDateForNASA(endDate.toISOString().split('T')[0]);
-      
+
       const nasaApiUrl = `https://power.larc.nasa.gov/api/temporal/hourly/point?start=${startDateFormatted}&end=${endDateFormatted}&latitude=${latitude}&longitude=${longitude}&community=${community}&parameters=${parameters}&header=true`;
-      
+
       console.log('Fetching weather data from:', nasaApiUrl);
       
       const response = await fetch(nasaApiUrl);
@@ -219,6 +221,7 @@ const WeatherPrediction: React.FC<WeatherPredictionProps> = ({
       
       const nasaData = await response.json();
       const processedData = processNASAData(nasaData);
+      console.log(nasaData)
       setWeatherData(processedData);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch weather data');

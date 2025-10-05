@@ -28,8 +28,8 @@ const HeroSection = () => {
     {
       icon: <Cloud className="w-6 h-6" />,
       title: "RAIN PROBABILITY",
-      value: "",
-      status: "Low Risk",
+      value: "Rain Probablity Calculation",
+      status: "Nasa API (POWER)",
       color: "text-green-400",
       bgColor: "bg-green-500/10",
       borderColor: "border-green-500/20"
@@ -37,8 +37,8 @@ const HeroSection = () => {
     {
       icon: <Thermometer className="w-6 h-6" />,
       title: "TEMPERATURE",
-      value: "72°F",
-      status: "Comfortable",
+      value: "Heat Risk Prediction",
+      status: "Nasa API (POWER)",
       color: "text-blue-400",
       bgColor: "bg-blue-500/10",
       borderColor: "border-blue-500/20"
@@ -46,8 +46,8 @@ const HeroSection = () => {
     {
       icon: <Wind className="w-6 h-6" />,
       title: "WIND SPEED",
-      value: "8 mph",
-      status: "Light Breeze",
+      value: "Wind Speed Measurments",
+      status: "Nasa API (POWER)",
       color: "text-cyan-400",
       bgColor: "bg-cyan-500/10",
       borderColor: "border-cyan-500/20"
@@ -177,19 +177,6 @@ const HeroSection = () => {
           </div>
         </div>
 
-        {/* Scroll indicator */}
-        <div 
-          className={`absolute bottom-8 left-1/2 transform -translate-x-1/2 transition-all duration-1000 ease-out delay-700 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-          }`}
-        >
-          <div className="flex flex-col items-center text-gray-400">
-            <div className="w-6 h-10 border-2 border-gray-400 rounded-full flex justify-center">
-              <div className="w-1 h-3 bg-gray-400 rounded-full mt-2 animate-bounce"></div>
-            </div>
-            <p className="text-xs mt-2 uppercase tracking-wider">Scroll to continue</p>
-          </div>
-        </div>
       </div>
     </div>
   );
