@@ -29,7 +29,7 @@ const HeroSection = () => {
       icon: <Cloud className="w-6 h-6" />,
       title: "RAIN PROBABILITY",
       value: "",
-      status: "NASA API",
+      status: "Low Risk",
       color: "text-green-400",
       bgColor: "bg-green-500/10",
       borderColor: "border-green-500/20"
@@ -37,8 +37,8 @@ const HeroSection = () => {
     {
       icon: <Thermometer className="w-6 h-6" />,
       title: "TEMPERATURE",
-      value: "",
-      status: "NASA API",
+      value: "72°F",
+      status: "Comfortable",
       color: "text-blue-400",
       bgColor: "bg-blue-500/10",
       borderColor: "border-blue-500/20"
@@ -46,8 +46,8 @@ const HeroSection = () => {
     {
       icon: <Wind className="w-6 h-6" />,
       title: "WIND SPEED",
-      value: "",
-    status: "NASA API",
+      value: "8 mph",
+      status: "Light Breeze",
       color: "text-cyan-400",
       bgColor: "bg-cyan-500/10",
       borderColor: "border-cyan-500/20"

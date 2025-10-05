@@ -11,6 +11,7 @@ import { ForecastResult } from "./types";
 import Map from "./components/Map";
 import axios from "axios";
 import "./App.css"; 
+import Footer from "./components/Footer";
 
 // Transform NASA POWER API data to ForecastResult format
 const transformNASADataToForecastResult = (nasaData: any, location: { lat: number; lon: number }, date: string): ForecastResult => {
@@ -266,6 +267,8 @@ function App() {
         <p>Weather data powered by Open-Meteo and NASA POWER</p>
       </footer>
       </div>
+          <Footer />
+
     </>
   );
 }

@@ -104,7 +104,7 @@ const Intro = ({ onComplete }: IntroProps) => {
           
           {/* Subheadline */}
           <p className="text-lg md:text-xl text-gray-300 font-light tracking-wide">
-            lorem ipsum
+            Will it rain on my parade?
           </p>
         </div>
 
