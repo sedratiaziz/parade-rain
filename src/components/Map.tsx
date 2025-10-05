@@ -3,7 +3,7 @@ import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 
 const containerStyle = {
   width: "100%",
-  height: "400px", // Adjust as needed or make responsive
+  height: "75vh", // Adjust as needed or make responsive
 };
 
 const defaultCenter = {
