@@ -5,9 +5,12 @@ import DatePicker from "./components/DatePicker";
 import ResultsCard from "./components/ResultsCard";
 import LoadingSpinner from "./components/LoadingSpinner";
 import WeatherPrediction from "./components/WeatherPrediction";
+import Intro from "./components/Intro";
+import HeroSection from "./components/HeroSection";
 import { ForecastResult } from "./types";
 import Map from "./components/Map";
 import axios from "axios";
+import "./App.css"; 
 
 // Transform NASA POWER API data to ForecastResult format
 const transformNASADataToForecastResult = (nasaData: any, location: { lat: number; lon: number }, date: string): ForecastResult => {
@@ -64,6 +67,7 @@ const transformNASADataToForecastResult = (nasaData: any, location: { lat: numbe
 };
 
 function App() {
+  const [showIntro, setShowIntro] = useState(true);
   const [location, setLocation] = useState<{
     lat: number;
     lon: number;
@@ -144,6 +148,10 @@ function App() {
 
   const canGetForecast = location && date && !isLoading;
 
+  const handleIntroComplete = () => {
+    setShowIntro(false);
+  };
+
 
 
 
@@ -160,9 +168,17 @@ function App() {
 //   }, [])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">
+    <>
+      {showIntro && <Intro onComplete={handleIntroComplete} />}
+      
+      {/* Hero Section */}
+      <HeroSection />
+      
+      {/* Main App Content */}
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">
       <div className="container mx-auto px-4 py-8">
-        <header className="text-center mb-12">
+        
+          <header className="header text-center mb-12 mt-20">
           <div className="flex items-center justify-center gap-3 mb-4">
             <Umbrella className="w-12 h-12 text-blue-600" />
             <h1 className="text-4xl md:text-5xl font-bold text-gray-800">
@@ -174,9 +190,10 @@ function App() {
             and heat risk forecasts to plan your perfect day.
           </p>
         </header>
+        
 
         <div className="flex flex-col items-center gap-6 mb-8">
-          <div className="grid md:grid-cols-2 gap-6 w-full max-w-4xl">
+          <div className="grid md:grid-cols-2 gap-6 w-full max-w-4xl mb-20">
             <LocationInput
               onLocationSelect={handleLocationSelect}
               manualLat={manualLat}
@@ -219,6 +236,8 @@ function App() {
             </button>
           )}
         </div>
+        
+       
 
         {error && (
           <div className="max-w-2xl mx-auto mb-8">
@@ -246,7 +265,8 @@ function App() {
       <footer className="text-center py-8 text-gray-600 text-sm">
         <p>Weather data powered by Open-Meteo and NASA POWER</p>
       </footer>
-    </div>
+      </div>
+    </>
   );
 }
 
