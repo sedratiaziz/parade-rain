@@ -15,72 +15,8 @@ hehe
 
 ## Tech Stack
 
-- **Frontend**: React, TypeScript, Tailwind CSS
-- **Backend**: Supabase Edge Functions
-- **Database**: Supabase (PostgreSQL)
-- **Weather API**: Open-Meteo (free, no API key required)
-- **Icons**: Lucide React
+- **React**
+- **Python**
+- **Node.js**
+- **RESTful APIs**
 
-## Project Structure
-
-```
-src/
-├── components/       # React components
-│   ├── LocationInput.tsx
-│   ├── DatePicker.tsx
-│   ├── ResultsCard.tsx
-│   ├── LoadingSpinner.tsx
-│   └── RiskBadge.tsx
-├── services/        # API services
-│   └── forecastService.ts
-├── lib/             # Utilities
-│   └── supabase.ts
-├── types.ts         # TypeScript types
-└── App.tsx          # Main app component
-
-supabase/
-├── functions/       # Edge functions
-│   └── forecast/
-│       └── index.ts
-└── migrations/      # Database migrations
-    └── 001_create_forecast_tables.sql
-```
-
-## Risk Levels
-
-### Rain Risk
-- **Low**: < 30% chance of rain
-- **Medium**: 30-59% chance of rain
-- **High**: ≥ 60% chance of rain
-
-### Heat Risk
-- **Low**: < 80°F (< 27°C)
-- **Medium**: 80-89°F (27-31°C)
-- **High**: ≥ 90°F (≥ 32°C)
-
-## Database Schema
-
-The app uses two main tables:
-
-1. **forecast_queries**: Stores user queries and results for analytics
-2. **forecast_cache**: Caches API responses to reduce external API calls
-
-## Development
-
-```bash
-# Install dependencies
-npm install
-
-# Run development server
-npm run dev
-
-# Build for production
-npm run build
-```
-
-## Environment Variables
-
-The following environment variables are configured in `.env`:
-
-- `VITE_SUPABASE_URL`: Supabase project URL
-- `VITE_SUPABASE_ANON_KEY`: Supabase anonymous key
