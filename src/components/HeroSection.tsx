@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Cloud, Droplets, Thermometer, Wind, MapPin, Calendar } from 'lucide-react';
+import './'
 
 const HeroSection = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -7,28 +8,18 @@ const HeroSection = () => {
 
   useEffect(() => {
     setIsVisible(true);
-    
-    // Update time every minute
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 60000);
-
+    const timer = setInterval(() => setCurrentTime(new Date()), 60000);
     return () => clearInterval(timer);
   }, []);
 
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('en-US', { 
-      hour: 'numeric', 
-      minute: '2-digit',
-      hour12: false 
-    });
-  };
+  const formatTime = (date: Date) =>
+    date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: false });
 
   const weatherCards = [
     {
       icon: <Cloud className="w-6 h-6" />,
       title: "RAIN PROBABILITY",
-      value: "Rain Probablity Calculation",
+      value: "Rain Probability Calculation",
       status: "Nasa API (POWER)",
       color: "text-green-400",
       bgColor: "bg-green-500/10",
@@ -46,7 +37,7 @@ const HeroSection = () => {
     {
       icon: <Wind className="w-6 h-6" />,
       title: "WIND SPEED",
-      value: "Wind Speed Measurments",
+      value: "Wind Speed Measurements",
       status: "Nasa API (POWER)",
       color: "text-cyan-400",
       bgColor: "bg-cyan-500/10",
@@ -79,19 +70,19 @@ const HeroSection = () => {
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 py-20">
         {/* Hero title */}
         <div 
-          className={`text-center mb-12 transition-all duration-1000 ease-out ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
+          className={`text-center mb-12 transition-all duration-1000 ease-out
+            ${isVisible ? 'opacity-100 translate-y-0 animate-fade-in-up' : 'opacity-0 translate-y-8'}
+          `}
         >
           <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="p-3 bg-blue-500/20 rounded-xl backdrop-blur-sm border border-blue-500/30">
+            <div className="p-3 bg-blue-500/20 rounded-xl backdrop-blur-sm border border-blue-500/30 animate-bounce-slow">
               <Droplets className="w-8 h-8 text-blue-400" />
             </div>
-            <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight">
+            <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight animate-fade-in-up">
               BAROONAUTS
             </h1>
           </div>
-          <p className="text-xl md:text-2xl text-gray-300 font-light max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-gray-300 font-light max-w-2xl mx-auto leading-relaxed animate-fade-in-up delay-200">
             Advanced weather intelligence for your events. 
             <span className="text-blue-400"> Predict, plan, and protect.</span>
           </p>
@@ -99,21 +90,19 @@ const HeroSection = () => {
 
         {/* Weather cards grid */}
         <div 
-          className={`grid md:grid-cols-3 gap-6 w-full max-w-6xl mb-12 transition-all duration-1000 ease-out delay-300 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
+          className={`grid md:grid-cols-3 gap-6 w-full max-w-6xl mb-12
+            ${isVisible ? 'animate-stagger-fade-in' : 'opacity-0'}
+          `}
         >
           {weatherCards.map((card, index) => (
             <div
               key={index}
-              className={`group relative bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-6 hover:bg-gray-800/70 transition-all duration-300 hover:scale-105 hover:shadow-2xl ${
-                card.borderColor
-              }`}
-              style={{ animationDelay: `${index * 200}ms` }}
+              className={`group relative bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-6 hover:bg-gray-800/70 transition-all duration-300 hover:scale-105 hover:shadow-2xl ${card.borderColor}
+                ${isVisible ? `animate-fade-in-up delay-[${index * 200}ms]` : 'opacity-0 translate-y-8'}
+              `}
             >
               {/* Card glow effect */}
               <div className={`absolute inset-0 rounded-2xl ${card.bgColor} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
-              
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
                   <div className={`p-2 rounded-lg ${card.bgColor} ${card.borderColor} border`}>
@@ -121,15 +110,12 @@ const HeroSection = () => {
                   </div>
                   <div className={`w-2 h-2 rounded-full ${card.color.replace('text-', 'bg-')} animate-pulse`}></div>
                 </div>
-                
                 <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-2">
                   {card.title}
                 </h3>
-                
                 <div className="text-3xl font-bold text-white mb-2">
                   {card.value}
                 </div>
-                
                 <p className={`text-sm font-medium ${card.color}`}>
                   {card.status}
                 </p>
@@ -140,14 +126,13 @@ const HeroSection = () => {
 
         {/* Action cards */}
         <div 
-          className={`grid md:grid-cols-2 gap-6 w-full max-w-4xl transition-all duration-1000 ease-out delay-500 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
+          className={`grid md:grid-cols-2 gap-6 w-full max-w-4xl
+            ${isVisible ? 'animate-stagger-fade-in delay-500' : 'opacity-0'}
+          `}
         >
-          {/* Location card */}
-          <div className="group bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-6 hover:bg-gray-800/70 transition-all duration-300 hover:scale-105">
+          <div className="group bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-6 hover:bg-gray-800/70 transition-all duration-300 hover:scale-105 animate-fade-in-up">
             <div className="flex items-center gap-4 mb-4">
-              <div className="p-3 bg-green-500/20 rounded-xl border border-green-500/30">
+              <div className="p-3 bg-green-500/20 rounded-xl border border-green-500/30 animate-bounce-slow">
                 <MapPin className="w-6 h-6 text-green-400" />
               </div>
               <div>
@@ -159,11 +144,9 @@ const HeroSection = () => {
               Choose from our interactive map or enter coordinates manually for precise weather analysis.
             </p>
           </div>
-
-          {/* Date card */}
-          <div className="group bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-6 hover:bg-gray-800/70 transition-all duration-300 hover:scale-105">
+          <div className="group bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-6 hover:bg-gray-800/70 transition-all duration-300 hover:scale-105 animate-fade-in-up delay-200">
             <div className="flex items-center gap-4 mb-4">
-              <div className="p-3 bg-blue-500/20 rounded-xl border border-blue-500/30">
+              <div className="p-3 bg-blue-500/20 rounded-xl border border-blue-500/30 animate-bounce-slow">
                 <Calendar className="w-6 h-6 text-blue-400" />
               </div>
               <div>
@@ -176,7 +159,6 @@ const HeroSection = () => {
             </p>
           </div>
         </div>
-
       </div>
     </div>
   );

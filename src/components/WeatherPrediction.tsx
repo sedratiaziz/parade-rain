@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Cloud, Sun, CloudRain, Snowflake, Thermometer, Droplets, Wind, Eye } from 'lucide-react';
+import WeatherChart from "./WeatherChart";
 
 interface WeatherPredictionProps {
   latitude: number;
@@ -203,7 +204,7 @@ const WeatherPrediction: React.FC<WeatherPredictionProps> = ({
       const selectedDate = new Date(date);
       const startDate = new Date(selectedDate);
       startDate.setDate(selectedDate.getDate() - dateRangeDays);
-      const endDate = new Date(selectedDate);
+      const endDate = new Date(selectedDate); 
       endDate.setDate(selectedDate.getDate() + dateRangeDays);
 
       // Format start and end dates with year - 3 and yyyymmdd format
@@ -350,6 +351,9 @@ const WeatherPrediction: React.FC<WeatherPredictionProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Weather Chart */}
+      <WeatherChart weatherData={weatherData} />
 
       {/* Data Summary */}
       <div className="bg-gray-50 rounded-lg p-4">
